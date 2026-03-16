@@ -49,8 +49,9 @@
         padding: 20px;
         border-radius: 15px;
         width: 300px;
-        animation: fadeIn 1s forwards;
-        position: relative; /* 🔥 CLAVE */
+        height: 400px;  /* altura fija */
+        position: relative; /* referencia para los botones */
+        overflow: hidden; /* los botones no salen de la carta */
     }
 
     @keyframes fadeIn {
@@ -71,13 +72,17 @@
     #yes {
         background: #28a745;
         color: white;
+        position: absolute;
+        top: 300px;  /* parte inferior */
+        left: 150px;
+        transform-origin: center center;
     }
 
     #no {
         background: #dc3545;
         color: white;
         position: absolute;
-        top: 150px;
+        top: 300px; /* parte inferior */
         left: 50px;
     }
 
@@ -123,8 +128,12 @@ function moveNo() {
     const noBtn = document.getElementById("no");
     const letter = document.getElementById("letter");
 
-    const x = Math.random() * (letter.clientWidth - 80);
-    const y = Math.random() * (letter.clientHeight - 40);
+    const minY = 250; // zona inferior donde están los botones
+    const maxY = letter.clientHeight - 40;
+    const maxX = letter.clientWidth - 80;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * (maxY - minY) + minY;
 
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
@@ -135,14 +144,14 @@ function reject() {
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
 
-    // mover NO dentro de la carta
+    // mover NO solo en zona inferior
     moveNo();
 
-    // crecer SI solo cuando toca NO
+    // SI crece al tocar NO
     yesScale += 0.4;
     yesBtn.style.transform = "scale(" + yesScale + ")";
 
-    // desaparecer NO después de varios intentos
+    // desaparece NO después de varios intentos
     if (noClicks >= 5) {
         noBtn.style.display = "none";
     }
