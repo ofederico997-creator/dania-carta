@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Carta 💌</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    .envelope {
+        width: 200px;
+        height: 120px;
+        background: #fff;
+        position: relative;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .envelope:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-left: 100px solid transparent;
+        border-right: 100px solid transparent;
+        border-top: 60px solid #ff6b81;
+        transform-origin: top;
+        transition: 0.5s;
+    }
+
+    .open:before {
+        transform: rotateX(180deg);
+    }
+
+    .letter {
+        display: none;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        width: 300px;
+        animation: fadeIn 1s forwards;
+        position: relative; /* 🔥 CLAVE */
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+
+    button {
+        margin: 10px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    #yes {
+        background: #28a745;
+        color: white;
+    }
+
+    #no {
+        background: #dc3545;
+        color: white;
+        position: absolute;
+        top: 150px;
+        left: 50px;
+    }
+
+    .date {
+        margin-top: 15px;
+        font-size: 18px;
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="envelope" onclick="openLetter()"></div>
+
+    <div class="letter" id="letter">
+        <p>Quería hacer esto lo más creativo posible… porque pensé en vos 😅</p>
+        <p>¿Qué te parece si vamos a tomar un helado en Mola?</p>
+        <p>Prometo que invito 😉</p>
+
+        <button id="yes" onclick="accept()">Sí 💚</button>
+        <button id="no" onclick="reject()">No ❌</button>
+
+        <div class="date" id="date">Entonces… sábado 21 de marzo 💖</div>
+    </div>
+</div>
+
+<script>
+let noClicks = 0;
+let yesScale = 1;
+
+function openLetter() {
+    document.querySelector(".envelope").classList.add("open");
+
+    setTimeout(() => {
+        document.querySelector(".envelope").style.display = "none";
+        document.getElementById("letter").style.display = "block";
+        moveNo();
+    }, 500);
+}
+
+function moveNo() {
+    const noBtn = document.getElementById("no");
+    const letter = document.getElementById("letter");
+
+    const x = Math.random() * (letter.clientWidth - 80);
+    const y = Math.random() * (letter.clientHeight - 40);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+function reject() {
+    noClicks++;
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+
+    // mover NO dentro de la carta
+    moveNo();
+
+    // crecer SI solo cuando toca NO
+    yesScale += 0.4;
+    yesBtn.style.transform = "scale(" + yesScale + ")";
+
+    // desaparecer NO después de varios intentos
+    if (noClicks >= 5) {
+        noBtn.style.display = "none";
+    }
+}
+
+function accept() {
+    document.getElementById("date").style.display = "block";
+}
+</script>
+
+</body>
+</html>
